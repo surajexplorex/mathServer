@@ -1,10 +1,8 @@
 syntax = "proto3";
 
 import "google/api/annotations.proto";
-import "google/protobuf/struct.proto";
-import "google/protobuf/timestamp.proto";
 
-option go_package = "./protos/mathServer";
+option go_package = "./proto/mathServer";
 
 
 service MathOperations {
@@ -46,4 +44,5 @@ message MathInput {
 
 message MathOutput {
   float Output = 1;
+  string message = 2;
 }

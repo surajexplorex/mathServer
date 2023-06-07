@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc/reflection"
 	"log"
 	protos "mathOperation/proto/mathServer"
+	"mathOperation/service"
 	"net"
 )
 
@@ -15,20 +16,21 @@ func StartGRPCServer() {
 	s := grpc.NewServer()
 
 	// create new instance of MathOperation grpc
-	trans := NewMathOperationServer()
+	trans := service.NewMathOperationServer()
 
-	// register reflection API https://github.com/grpc/grpc/blob/master/doc/server-reflection.md
+	// register reflection API
 	reflection.Register(s)
 
-	// register it to the grpc grpc
+	// register it to the grpc
 	protos.RegisterMathOperationsServer(s, trans)
 
 	// create socket to listen to requests
-	tl, err := net.Listen("tcp", "localhost:8765")
+	tl, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
-		log.Fatal(fmt.Println("Error starting tcp listener on port 8765", err))
+		log.Fatal(fmt.Println("Error starting tcp listener on port 8080", err))
 	}
-	fmt.Println("starting tcp listener on port 8765")
+	fmt.Println("starting tcp listener on port 8080")
+	log.Printf("============ GRPC server started.============ ")
 
 	// start listening
 	s.Serve(tl)

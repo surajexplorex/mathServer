@@ -1,3 +1,3 @@
 generate_grpc_code:
-	protoc protos/mathServer.proto --go-grpc_out=. --go_out=.
+	protoc proto/mathServer.proto --go-grpc_out=. --go_out=. --grpc-gateway_out=.
 

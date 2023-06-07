@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.21.12
-// source: protos/mathServer.proto
+// source: proto/mathServer.proto
 
 package mathServer
 
@@ -216,5 +216,5 @@ var MathOperations_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "protos/mathServer.proto",
+	Metadata: "proto/mathServer.proto",
 }
