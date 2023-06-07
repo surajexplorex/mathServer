@@ -22,6 +22,7 @@ const (
 	MathOperations_Add_FullMethodName      = "/MathOperations/Add"
 	MathOperations_Subtract_FullMethodName = "/MathOperations/Subtract"
 	MathOperations_Multiply_FullMethodName = "/MathOperations/Multiply"
+	MathOperations_Divide_FullMethodName   = "/MathOperations/Divide"
 )
 
 // MathOperationsClient is the client API for MathOperations service.
@@ -31,6 +32,7 @@ type MathOperationsClient interface {
 	Add(ctx context.Context, in *MathInput, opts ...grpc.CallOption) (*MathOutput, error)
 	Subtract(ctx context.Context, in *MathInput, opts ...grpc.CallOption) (*MathOutput, error)
 	Multiply(ctx context.Context, in *MathInput, opts ...grpc.CallOption) (*MathOutput, error)
+	Divide(ctx context.Context, in *MathInput, opts ...grpc.CallOption) (*MathOutput, error)
 }
 
 type mathOperationsClient struct {
@@ -68,6 +70,15 @@ func (c *mathOperationsClient) Multiply(ctx context.Context, in *MathInput, opts
 	return out, nil
 }
 
+func (c *mathOperationsClient) Divide(ctx context.Context, in *MathInput, opts ...grpc.CallOption) (*MathOutput, error) {
+	out := new(MathOutput)
+	err := c.cc.Invoke(ctx, MathOperations_Divide_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MathOperationsServer is the server API for MathOperations service.
 // All implementations must embed UnimplementedMathOperationsServer
 // for forward compatibility
@@ -75,6 +86,7 @@ type MathOperationsServer interface {
 	Add(context.Context, *MathInput) (*MathOutput, error)
 	Subtract(context.Context, *MathInput) (*MathOutput, error)
 	Multiply(context.Context, *MathInput) (*MathOutput, error)
+	Divide(context.Context, *MathInput) (*MathOutput, error)
 	mustEmbedUnimplementedMathOperationsServer()
 }
 
@@ -90,6 +102,9 @@ func (UnimplementedMathOperationsServer) Subtract(context.Context, *MathInput) (
 }
 func (UnimplementedMathOperationsServer) Multiply(context.Context, *MathInput) (*MathOutput, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Multiply not implemented")
+}
+func (UnimplementedMathOperationsServer) Divide(context.Context, *MathInput) (*MathOutput, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Divide not implemented")
 }
 func (UnimplementedMathOperationsServer) mustEmbedUnimplementedMathOperationsServer() {}
 
@@ -158,6 +173,24 @@ func _MathOperations_Multiply_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MathOperations_Divide_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MathInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MathOperationsServer).Divide(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MathOperations_Divide_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MathOperationsServer).Divide(ctx, req.(*MathInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MathOperations_ServiceDesc is the grpc.ServiceDesc for MathOperations service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +209,10 @@ var MathOperations_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Multiply",
 			Handler:    _MathOperations_Multiply_Handler,
+		},
+		{
+			MethodName: "Divide",
+			Handler:    _MathOperations_Divide_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

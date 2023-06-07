@@ -1,4 +1,4 @@
-package server
+package grpc
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"log"
 	"mathOperation/constants"
 	"mathOperation/entities"
-	protos "mathOperation/protos/mathServer"
+	protos "mathOperation/proto/mathServer"
 	"mathOperation/repository"
 )
 
@@ -73,6 +73,30 @@ func (t *MathOperationServer) Multiply(ctx context.Context, i *protos.MathInput)
 		Request:       i.String(),
 		Response:      tra.String(),
 		OperationType: constants.MULTIPLY,
+	}
+	err := t.mathRepository.InsertRequestAndResponse(mathOperationEntity)
+	if err != nil {
+		fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
+		return tra, err
+	}
+	return tra, nil
+}
+
+// Divide will perform the multiplication operation
+func (t *MathOperationServer) Divide(ctx context.Context, i *protos.MathInput) (*protos.MathOutput, error) {
+
+	log.Printf(`Dividing two numbers %f with %f`, i.GetFirstNumber(), i.GetSecondNumber())
+	if i.GetFirstNumber() == 0 && i.GetSecondNumber() == 0 {
+		return nil, fmt.Errorf("both the numbers can't be zeros")
+	}
+	result := i.GetFirstNumber() * i.GetSecondNumber()
+	tra := &protos.MathOutput{
+		Output: result,
+	}
+	mathOperationEntity := entities.APILogs{
+		Request:       i.String(),
+		Response:      tra.String(),
+		OperationType: constants.DIVIDE,
 	}
 	err := t.mathRepository.InsertRequestAndResponse(mathOperationEntity)
 	if err != nil {

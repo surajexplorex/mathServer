@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "./protos/mathServer";
+
+
+service MathOperations {
+
+  rpc Add(MathInput) returns (MathOutput){
+    option(google.api.http) = {
+      post: "/add"
+      body: "*"
+    };
+  }
+
+  rpc Subtract(MathInput) returns (MathOutput){
+    option(google.api.http) = {
+      post: "/subtract"
+      body: "*"
+    };
+  }
+
+  rpc Multiply(MathInput) returns (MathOutput){
+    option(google.api.http) = {
+      post: "/multiply"
+      body: "*"
+    };
+  }
+
+  rpc Divide(MathInput) returns (MathOutput){
+    option(google.api.http) = {
+      post: "/divide"
+      body: "*"
+    };
+  }
+}
+
+
+message MathInput {
+  float FirstNumber = 1;
+  float SecondNumber = 2;
+}
+
+message MathOutput {
+  float Output = 1;
+}
