@@ -22,7 +22,7 @@ func (t *MathService) Add(ctx context.Context, i *protos.MathInput) (*protos.Mat
 	result := i.GetFirstNumber() + i.GetSecondNumber()
 	tra := &protos.MathOutput{
 		Output:  result,
-		Message: fmt.Sprintf("Multiplication result of %f and %f", i.GetFirstNumber(), i.GetSecondNumber()),
+		Message: fmt.Sprintf("Addition result of %f and %f", i.GetFirstNumber(), i.GetSecondNumber()),
 	}
 	mathOperationEntity := entities.APILogs{
 		Request:       i.String(),
@@ -31,8 +31,7 @@ func (t *MathService) Add(ctx context.Context, i *protos.MathInput) (*protos.Mat
 	}
 	err := t.mathRepository.InsertRequestAndResponse(mathOperationEntity)
 	if err != nil {
-		fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
-		return tra, err
+		return tra, fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
 	}
 	return tra, nil
 }
@@ -55,8 +54,7 @@ func (t *MathService) Subtract(ctx context.Context, i *protos.MathInput) (*proto
 	}
 	err := t.mathRepository.InsertRequestAndResponse(mathOperationEntity)
 	if err != nil {
-		fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
-		return tra, err
+		return tra, fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
 	}
 	return tra, nil
 }
@@ -77,8 +75,7 @@ func (t *MathService) Multiply(ctx context.Context, i *protos.MathInput) (*proto
 	}
 	err := t.mathRepository.InsertRequestAndResponse(mathOperationEntity)
 	if err != nil {
-		fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
-		return tra, err
+		return tra, fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
 	}
 	return tra, nil
 }
@@ -105,8 +102,7 @@ func (t *MathService) Divide(ctx context.Context, i *protos.MathInput) (*protos.
 	}
 	err := t.mathRepository.InsertRequestAndResponse(mathOperationEntity)
 	if err != nil {
-		fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
-		return tra, err
+		return tra, fmt.Errorf("error while inserting request response data into DB. Err - %w", err)
 	}
 	return tra, nil
 }
