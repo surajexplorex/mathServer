@@ -18,11 +18,11 @@ type MathService struct {
 // Add will perform the addition operation
 func (t *MathService) Add(ctx context.Context, i *protos.MathInput) (*protos.MathOutput, error) {
 
-	log.Printf(`Adding two numbers %f and %f`, i.GetFirstNumber(), i.GetSecondNumber())
-	result := i.GetFirstNumber() + i.GetSecondNumber()
+	log.Printf(`Adding two numbers %f and %f`, i.FirstNumber, i.SecondNumber)
+	result := i.FirstNumber + i.SecondNumber
 	tra := &protos.MathOutput{
 		Output:  result,
-		Message: fmt.Sprintf("Addition result of %f and %f", i.GetFirstNumber(), i.GetSecondNumber()),
+		Message: fmt.Sprintf("Addition result of %f and %f", i.FirstNumber, i.SecondNumber),
 	}
 	mathOperationEntity := entities.APILogs{
 		Request:       i.String(),
@@ -39,12 +39,12 @@ func (t *MathService) Add(ctx context.Context, i *protos.MathInput) (*protos.Mat
 // Subtract will perform the subtraction operation
 func (t *MathService) Subtract(ctx context.Context, i *protos.MathInput) (*protos.MathOutput, error) {
 
-	log.Printf(`Subtracting two numbers %f and %f`, i.GetFirstNumber(), i.GetSecondNumber())
-	result := i.GetFirstNumber() - i.GetSecondNumber()
+	log.Printf(`Subtracting two numbers %f and %f`, i.FirstNumber, i.SecondNumber)
+	result := i.FirstNumber - i.SecondNumber
 
 	tra := &protos.MathOutput{
 		Output:  result,
-		Message: fmt.Sprintf("Subtraction result of %f and %f", i.GetFirstNumber(), i.GetSecondNumber()),
+		Message: fmt.Sprintf("Subtraction result of %f and %f", i.FirstNumber, i.SecondNumber),
 	}
 	log.Printf(`Subtract operation response %s`, tra.String())
 	mathOperationEntity := entities.APILogs{
@@ -62,11 +62,11 @@ func (t *MathService) Subtract(ctx context.Context, i *protos.MathInput) (*proto
 // Multiply will perform the multiplication operation
 func (t *MathService) Multiply(ctx context.Context, i *protos.MathInput) (*protos.MathOutput, error) {
 
-	log.Printf(`Multiplying two numbers %f with %f`, i.GetFirstNumber(), i.GetSecondNumber())
-	result := i.GetFirstNumber() * i.GetSecondNumber()
+	log.Printf(`Multiplying two numbers %f with %f`, i.FirstNumber, i.SecondNumber)
+	result := i.FirstNumber * i.SecondNumber
 	tra := &protos.MathOutput{
 		Output:  result,
-		Message: fmt.Sprintf("Multiplication result of %f and %f", i.GetFirstNumber(), i.GetSecondNumber()),
+		Message: fmt.Sprintf("Multiplication result of %f and %f", i.FirstNumber, i.SecondNumber),
 	}
 	mathOperationEntity := entities.APILogs{
 		Request:       i.String(),
@@ -83,18 +83,23 @@ func (t *MathService) Multiply(ctx context.Context, i *protos.MathInput) (*proto
 // Divide will perform the multiplication operation
 func (t *MathService) Divide(ctx context.Context, i *protos.MathInput) (*protos.MathOutput, error) {
 
-	log.Printf(`Dividing two numbers %f with %f`, i.GetFirstNumber(), i.GetSecondNumber())
+	log.Printf(`Dividing two numbers %f with %f`, i.FirstNumber, i.SecondNumber)
+
+	var tra *protos.MathOutput
+
 	if i.GetSecondNumber() == 0 {
-		return &protos.MathOutput{
+		tra = &protos.MathOutput{
 			Output:  0,
-			Message: "second number can't be zero",
-		}, nil
+			Message: fmt.Sprintf("second number cannot be zero"),
+		}
+	} else {
+		result := i.FirstNumber / i.SecondNumber
+		tra = &protos.MathOutput{
+			Output:  result,
+			Message: fmt.Sprintf("Division result of %f and %f", i.FirstNumber, i.SecondNumber),
+		}
 	}
-	result := i.GetFirstNumber() / i.GetSecondNumber()
-	tra := &protos.MathOutput{
-		Output:  result,
-		Message: fmt.Sprintf("Division result of %f and %f", i.GetFirstNumber(), i.GetSecondNumber()),
-	}
+
 	mathOperationEntity := entities.APILogs{
 		Request:       i.String(),
 		Response:      tra.String(),
